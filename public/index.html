@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f4f8;
+        }
+        
+        .sidebar {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        
+        .sidebar a {
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar a.active {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6 !important;
+            border-left: 3px solid #3b82f6;
+            font-weight: 500;
+        }
+        
+        .sidebar a.text-white {
+            color: #3b82f6 !important;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .badge-high {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .badge-normal {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .badge-low {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .badge-completed {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+        
+        .badge-in-progress {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        
+        .badge-pending {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 2% auto;
+            padding: 0;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-sm {
+            padding: 4px 10px;
+            font-size: 0.875rem;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.9375rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 0.875rem;
+        }
+        
+        select.input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-position: right 8px center;
+            background-repeat: no-repeat;
+            background-size: 20px;
+            padding-right: 32px;
+        }
+        
+        .gantt-container {
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .gantt-bar {
+            height: 28px;
+            border-radius: 4px;
+            display: inline-block;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        
+        .gantt-bar:hover {
+            opacity: 0.8;
+        }
+        
+        .gantt-bar.pending { background: #9ca3af; }
+        .gantt-bar.in-progress { background: #3b82f6; }
+        .gantt-bar.completed { background: #10b981; }
+        
+        .gantt-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+            font-size: 12px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+        
+        .tab:hover {
+            color: #3b82f6;
+        }
+        
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: #6b7280;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #d1d5db;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 2000;
+            animation: toastSlide 0.3s ease;
+        }
+        
+        @keyframes toastSlide {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        .toast-success { background: #10b981; }
+        .toast-error { background: #ef4444; }
+        .toast-info { background: #3b82f6; }
+        
+        /* Calendar-like date input styling */
+        .date-input-wrapper {
+            position: relative;
+        }
+        
+        .date-input-wrapper input[type="date"] {
+            padding-left: 36px;
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0 !important;
+            }
+            
+            .modal-content {
+                margin: 0;
+                max-width: 100%;
+                height: 100vh;
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar fixed left-0 top-0 h-full w-64 p-6 shadow-2xl" style="z-index: 50;">
+        <div class="flex items-center mb-10">
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mr-3">
+                <i class="fas fa-tasks text-white text-lg"></i>
+            </div>
+            <div>
+                <h1 class="text-white text-xl font-bold">PMS System</h1>
+                <p class="text-gray-400 text-xs">Project Management</p>
+            </div>
+        </div>
+        
+        <nav>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-project-link" onclick="showProjects(); updateSidebarActive('projects')">
+                <i class="fas fa-folder-open w-5 mr-3"></i>
+                <span>Semua Proyek</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition" onclick="openCreateProjectModal()">
+                <i class="fas fa-plus-circle w-5 mr-3"></i>
+                <span>Buat Proyek Baru</span>
+            </a>
+        </nav>
+        
+        <div class="mt-8 pt-8 border-t border-gray-700" id="sidebar-features" style="display: none;">
+            <p class="text-gray-500 text-xs uppercase tracking-wider mb-4">Fitur</p>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('tasks', event)">
+                <i class="fas fa-list-check w-5 mr-3"></i>
+                <span>Manajemen Tugas</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('phases', event)">
+                <i class="fas fa-sitemap w-5 mr-3"></i>
+                <span>Fase SDLC</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('dependencies', event)">
+                <i class="fas fa-link w-5 mr-3"></i>
+                <span>Ketergantungan</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('team', event)">
+                <i class="fas fa-users w-5 mr-3"></i>
+                <span>Tim & Resource</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('gantt', event)">
+                <i class="fas fa-chart-bar w-5 mr-3"></i>
+                <span>Gantt Chart</span>
+            </a>
+            <a href="#" class="flex items-center px-4 py-3 text-gray-300 mb-1 rounded-lg transition sidebar-link" onclick="switchTab('milestones', event)">
+                <i class="fas fa-flag w-5 mr-3"></i>
+                <span>Milestones</span>
+            </a>
+        </div>
+    </aside>
+    
+    <!-- Main Content -->
+    <main class="main-content ml-64 p-8" style="min-height: 100vh;">
+        <!-- Header -->
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h2 id="pageTitle" class="text-3xl font-bold text-gray-900">Selamat Datang</h2>
+                <p id="pageSubtitle" class="text-gray-500 mt-1">Kelola proyek dan tugas Anda</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="showProjects()" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali
+                </button>
+            </div>
+        </header>
+        
+        <!-- Projects List Section -->
+        <section id="projects-section">
+            <div class="flex justify-between items-center mb-6">
+                <h3>Daftar Proyek</h3>
+                <button onclick="openCreateProjectModal()" class="btn btn-primary">
+                    <i class="fas fa-plus mr-2"></i> Proyek Baru
+                </button>
+            </div>
+            
+            <div id="projects-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Projects will be loaded here -->
+            </div>
+        </section>
+        
+        <!-- Project Detail Section -->
+        <section id="project-detail-section" style="display: none;">
+            <div class="card p-6 mb-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h2 id="project-name" class="text-2xl font-bold text-gray-900"></h2>
+                        <p id="project-description" class="text-gray-600 mt-1"></p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editProject()" class="btn btn-secondary btn-sm">
+                            <i class="fas fa-edit mr-1"></i> Edit
+                        </button>
+                        <button onclick="deleteProject()" class="btn btn-danger btn-sm">
+                            <i class="fas fa-trash mr-1"></i> Hapus
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                        <span class="text-gray-500">Organisasi:</span>
+                        <p id="project-organization" class="font-medium mt-1"></p>
+                    </div>
+                    <div>
+                        <span class="text-gray-500">Mulai:</span>
+                        <p id="project-start" class="font-medium mt-1"></p>
+                    </div>
+                    <div>
+                        <span class="text-gray-500">Selesai:</span>
+                        <p id="project-end" class="font-medium mt-1"></p>
+                    </div>
+                    <div>
+                        <span class="text-gray-500">Durasi:</span>
+                        <p id="project-duration" class="font-medium mt-1"></p>
+                    </div>
+                </div>
+                
+                <div class="mt-4 pt-4 border-t border-gray-100">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-gray-600 font-medium">Progress Proyek</span>
+                        <span id="project-progress-percent" class="text-gray-900 font-semibold">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="project-progress-bar" class="progress-fill bg-blue-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-xs text-gray-500">
+                        <span id="tasks-completed">0</span> tugas selesai dari <span id="tasks-total">0</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <div class="flex gap-8 border-b border-gray-200 mb-6">
+                <div class="tab active" onclick="switchTab('tasks')">Tugas</div>
+                <div class="tab" onclick="switchTab('phases')">Fase SDLC</div>
+                <div class="tab" onclick="switchTab('dependencies')">Ketergantungan</div>
+                <div class="tab" onclick="switchTab('team')">Tim & Resource</div>
+                <div class="tab" onclick="switchTab('gantt')">Gantt Chart</div>
+                <div class="tab" onclick="switchTab('milestones')">Milestones</div>
+            </div>
+            
+            <!-- Tab Content -->
+            <div id="tab-tasks"></div>
+            <div id="tab-phases" style="display: none;"></div>
+            <div id="tab-dependencies" style="display: none;"></div>
+            <div id="tab-team" style="display: none;"></div>
+            <div id="tab-gantt" style="display: none;"></div>
+            <div id="tab-milestones" style="display: none;"></div>
+        </section>
+    </main>
+    
+    <!-- Modals -->
+    <div id="createProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Buat Proyek baru</h3>
+                <button onclick="closeModal('createProjectModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Nama Proyek <span class="text-red-500">*</span></label>
+                        <input type="text" id="project-name-input" class="input" placeholder="Masukkan nama proyek">
+                    </div>
+                    <div>
+                        <label class="input-label">Deskripsi</label>
+                        <textarea id="project-desc-input" class="input" rows="3" placeholder="Deskripsi proyek (opsional)"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-label">Organisasi / Klien</label>
+                        <input type="text" id="project-org-input" class="input" placeholder="Nama organisasi atau klien">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Tanggal Mulai <span class="text-red-500">*</span></label>
+                            <input type="date" id="project-start-input" class="input">
+                        </div>
+                        <div>
+                            <label class="input-label">Tanggal Selesai <span class="text-red-500">*</span></label>
+                            <input type="date" id="project-end-input" class="input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('createProjectModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createProject()" class="btn btn-primary">
+                    <i class="fas fa-save mr-2"></i> Buat Proyek
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="editProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Edit Proyek</h3>
+                <button onclick="closeModal('editProjectModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="edit-project-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Nama Proyek <span class="text-red-500">*</span></label>
+                        <input type="text" id="edit-project-name" class="input">
+                    </div>
+                    <div>
+                        <label class="input-label">Deskripsi</label>
+                        <textarea id="edit-project-desc" class="input" rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label class="input-label">Organisasi / Klien</label>
+                        <input type="text" id="edit-project-org" class="input">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Tanggal Mulai</label>
+                            <input type="date" id="edit-project-start" class="input">
+                        </div>
+                        <div>
+                            <label class="input-label">Tanggal Selesai</label>
+                            <input type="date" id="edit-project-end" class="input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('editProjectModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="saveProjectEdit()" class="btn btn-primary">
+                    <i class="fas fa-save mr-2"></i> Simpan Perubahan
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Konfirmasi Hapus</h3>
+            </div>
+            <div class="modal-body">
+                <p class="text-gray-600">Apakah Anda yakin ingin menghapus proyek ini? Semua data terkait (tugas, tim, dll.) juga akan dihapus.</p>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('deleteConfirmModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="confirmDeleteProject()" class="btn btn-danger">
+                    <i class="fas fa-trash mr-2"></i> Ya, Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="createTaskModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Tambah Tugas Baru</h3>
+                <button onclick="closeModal('createTaskModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Nama Tugas <span class="text-red-500">*</span></label>
+                        <input type="text" id="task-name-input" class="input" placeholder="Nama tugas">
+                    </div>
+                    <div>
+                        <label class="input-label">Deskripsi</label>
+                        <textarea id="task-desc-input" class="input" rows="2" placeholder="Deskripsi tugas (opsional)"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Fase SDLC</label>
+                            <select id="task-phase-select" class="input">
+                                <option value="">Pilih fase (opsional)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="input-label">Prioritas</label>
+                            <select id="task-priority-select" class="input">
+                                <option value="Low">Low</option>
+                                <option value="Normal" selected>Normal</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Durasi (hari kerja)</label>
+                            <input type="number" id="task-duration-input" class="input" min="1" value="1">
+                        </div>
+                        <div>
+                            <label class="input-label">Status</label>
+                            <select id="task-status-select" class="input">
+                                <option value="Pending">Pending</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Tanggal Mulai</label>
+                            <input type="date" id="task-start-input" class="input">
+                        </div>
+                        <div>
+                            <label class="input-label">Tanggal Target Selesai</label>
+                            <input type="date" id="task-end-input" class="input">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="input-label">Progress (%)</label>
+                        <input type="range" id="task-progress-input" class="w-full" min="0" max="100" value="0">
+                        <span id="task-progress-value" class="text-sm text-gray-600">0%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('createTaskModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createTask()" class="btn btn-primary">
+                    <i class="fas fa-plus mr-2"></i> Tambah Tugas
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="createDependencyModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Tambah Ketergantungan Tugas</h3>
+                <button onclick="closeModal('createDependencyModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="dep-task-id">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Tugas yang bergantung <span class="text-red-500">*</span></label>
+                        <select id="dep-task-select" class="input">
+                            <option value="">Pilih tugas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">Tugas Pendahulu (Predecessor) <span class="text-red-500">*</span></label>
+                        <select id="dep-predecessor-select" class="input">
+                            <option value="">Pilih tugas pendahulu</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="input-label">Jenis Hubungan</label>
+                            <select id="dep-type-select" class="input">
+                                <option value="Finish-to-Start" selected>Finish-to-Start (Selesai → Mulai)</option>
+                                <option value="Start-to-Start">Start-to-Start (Mulai → Mulai)</option>
+                                <option value="Finish-to-Finish">Finish-to-Finish (Selesai → Selesai)</option>
+                                <option value="Start-to-Finish">Start-to-Finish (Mulai → Selesai)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="input-label">Jeda / Delay (hari)</label>
+                            <input type="number" id="dep-lag-input" class="input" min="0" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('createDependencyModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createDependency()" class="btn btn-primary">
+                    <i class="fas fa-link mr-2"></i> Tambah Ketergantungan
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="createMemberModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Tambah Anggota Tim</h3>
+                <button onclick="closeModal('createMemberModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Nama Lengkap <span class="text-red-500">*</span></label>
+                        <input type="text" id="member-name-input" class="input" placeholder="Nama anggota tim">
+                    </div>
+                    <div>
+                        <label class="input-label">Peran / Posisi <span class="text-red-500">*</span></label>
+                        <select id="member-role-select" class="input">
+                            <option value="">Pilih peran</option>
+                            <option value="Project Manager">Project Manager</option>
+                            <option value="System Analyst">System Analyst</option>
+                            <option value="Programmer">Programmer</option>
+                            <option value="Tester">Tester</option>
+                            <option value="UI/UX Designer">UI/UX Designer</option>
+                            <option value="DevOps Engineer">DevOps Engineer</option>
+                            <option value="Database Administrator">Database Administrator</option>
+                            <option value="QA Engineer">QA Engineer</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">Email</label>
+                        <input type="email" id="member-email-input" class="input" placeholder="email@contoh.com">
+                    </div>
+                    <div>
+                        <label class="input-label">Telepon</label>
+                        <input type="tel" id="member-phone-input" class="input" placeholder="08123456789">
+                    </div>
+                    <div>
+                        <label class="input-label">Gaji / Honor (opsional)</label>
+                        <input type="number" id="member-salary-input" class="input" placeholder="0">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('createMemberModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createTeamMember()" class="btn btn-primary">
+                    <i class="fas fa-user-plus mr-2"></i> Tambah Anggota
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="assignResourceModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Alokasikan Resource ke Tugas</h3>
+                <button onclick="closeModal('assignResourceModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Tugas <span class="text-red-500">*</span></label>
+                        <select id="assign-task-select" class="input">
+                            <option value="">Pilih tugas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">Anggota Tim <span class="text-red-500">*</span></label>
+                        <select id="assign-member-select" class="input">
+                            <option value="">Pilih anggota tim</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="input-label">Persentase Alokasi (%)</label>
+                        <input type="number" id="assign-percentage-input" class="input" min="1" max="100" value="100">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('assignResourceModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createAssignment()" class="btn btn-primary">
+                    <i class="fas fa-check mr-2"></i> Alokasikan
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="createMilestoneModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h3 class="text-xl font-bold text-gray-900">Tambah Milestone</h3>
+                <button onclick="closeModal('createMilestoneModal')" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="space-y-4">
+                    <div>
+                        <label class="input-label">Nama Milestone <span class="text-red-500">*</span></label>
+                        <input type="text" id="milestone-name-input" class="input" placeholder="Nama milestone">
+                    </div>
+                    <div>
+                        <label class="input-label">Target Tanggal <span class="text-red-500">*</span></label>
+                        <input type="date" id="milestone-date-input" class="input">
+                    </div>
+                    <div>
+                        <label class="input-label">Deskripsi</label>
+                        <textarea id="milestone-desc-input" class="input" rows="2" placeholder="Deskripsi milestone (opsional)"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal('createMilestoneModal')" class="btn btn-secondary">Batal</button>
+                <button onclick="createMilestone()" class="btn btn-primary">
+                    <i class="fas fa-flag mr-2"></i> Tambah Milestone
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast container -->
+    <div id="toast-container"></div>
+    
+    <script src="app.js"></script>
+</body>
+</html>

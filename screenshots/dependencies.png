@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#f3f4f6"/>
+  <text x="600" y="400" text-anchor="middle" font-family="Arial" font-size="24" fill="#6b7280">Task Dependencies Screenshot</text>
+  <text x="600" y="430" text-anchor="middle" font-family="Arial" font-size="16" fill="#9ca3af">(Ganti dengan screenshot asli)</text>
+  <rect x="100" y="100" width="1000" height="600" fill="white" stroke="#e5e7eb" rx="8"/>
+  <rect x="100" y="100" width="1000" height="40" fill="#1f2937"/>
+  <text x="120" y="125" font-family="Arial" font-size="16" fill="white">Ketergantungan Tugas</text>
+  <rect x="150" y="180" width="250" height="50" fill="#e0f2fe" stroke="#7dd3fc" rx="4"/>
+  <text x="275" y="210" text-anchor="middle" font-family="Arial" font-size="14" fill="#0369a1">Pengumpulan Data</text>
+  <line x1="400" y1="205" x2="500" y2="205" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="500" y="180" width="250" height="50" fill="#e0f2fe" stroke="#7dd3fc" rx="4"/>
+  <text x="625" y="210" text-anchor="middle" font-family="Arial" font-size="14" fill="#0369a1">Analisis Alur Dokumen</text>
+  <line x1="750" y1="205" x2="850" y2="205" stroke="#9ca3af" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <rect x="850" y="180" width="250" height="50" fill="#fef3c7" stroke="#fbbf24" rx="4"/>
+  <text x="975" y="210" text-anchor="middle" font-family="Arial" font-size="14" fill="#92400e">Perancangan DB</text>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <text x="600" y="300" text-anchor="middle" font-family="Arial" font-size="12" fill="#6b7280">Finish-to-Start (FS) | Lag: 0 hari</text>
+  <rect x="150" y="350" width="400" height="150" fill="#f9fafb" stroke="#e5e7eb" rx="4"/>
+  <text x="350" y="380" text-anchor="middle" font-family="Arial" font-size="14" fill="#1f2937">Tabel Ketergantungan</text>
+  <line x1="170" y1="400" x2="530" y2="400" stroke="#e5e7eb"/>
+  <text x="175" y="415" font-family="Arial" font-size="12" fill="#6b7280">No</text>
+  <text x="220" y="415" font-family="Arial" font-size="12" fill="#6b7280">TUGAS PREDECESSOR</text>
+  <text x="450" y="415" font-family="Arial" font-size="12" fill="#6b7280">TUGAS BERIKUT</text>
+  <line x1="170" y1="425" x2="530" y2="425" stroke="#e5e7eb"/>
+  <text x="175" y="445" font-family="Arial" font-size="12" fill="#374151">1</text>
+  <text x="220" y="445" font-family="Arial" font-size="12" fill="#374151">Pengumpulan Data</text>
+  <text x="450" y="445" font-family="Arial" font-size="12" fill="#374151">Analisis Alur Dokumen</text>
+</svg>

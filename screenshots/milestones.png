@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <rect width="1200" height="800" fill="#f3f4f6"/>
+  <text x="600" y="400" text-anchor="middle" font-family="Arial" font-size="24" fill="#6b7280">Milestones Screenshot</text>
+  <text x="600" y="430" text-anchor="middle" font-family="Arial" font-size="16" fill="#9ca3af">(Ganti dengan screenshot asli)</text>
+  <rect x="100" y="100" width="1000" height="600" fill="white" stroke="#e5e7eb" rx="8"/>
+  <rect x="100" y="100" width="1000" height="40" fill="#1f2937"/>
+  <text x="120" y="125" font-family="Arial" font-size="16" fill="white">Milestones</text>
+  <rect x="150" y="180" width="900" height="60" fill="#f0fdf4" stroke="#86efac" rx="4"/>
+  <circle cx="180" cy="210" r="15" fill="#22c55e"/>
+  <text x="180" y="215" text-anchor="middle" font-family="Arial" font-size="14" fill="white" font-weight="bold">✓</text>
+  <text x="210" y="210" font-family="Arial" font-size="14" fill="#166534" font-weight="bold">Persetujuan Dokumen Spesifikasi Sistem</text>
+  <text x="210" y="235" font-family="Arial" font-size="12" fill="#6b7280">Target: 2026-11-10 | Status: Achieved</text>
+  <rect x="150" y="260" width="900" height="60" fill="#fefce8" stroke="#fde047" rx="4"/>
+  <circle cx="180" cy="290" r="15" fill="#eab308"/>
+  <circle cx="180" cy="290" r="4" fill="white"/>
+  <text x="210" y="290" font-family="Arial" font-size="14" fill="#92400e" font-weight="bold">Rilis Versi Alpha / Prototipe UI</text>
+  <text x="210" y="315" font-family="Arial" font-size="12" fill="#6b7280">Target: 2026-11-20 | Status: Pending</text>
+  <rect x="150" y="340" width="900" height="60" fill="#fefce8" stroke="#fde047" rx="4"/>
+  <circle cx="180" cy="370" r="15" fill="#eab308"/>
+  <circle cx="180" cy="370" r="4" fill="white"/>
+  <text x="210" y="370" font-family="Arial" font-size="14" fill="#92400e" font-weight="bold">Serah Terima Aplikasi &amp; Training</text>
+  <text x="210" y="395" font-family="Arial" font-size="12" fill="#6b7280">Target: 2026-12-15 | Status: Pending</text>
+  <rect x="150" y="430" width="400" height="80" fill="#e0f2fe" stroke="#7dd3fc" rx="4"/>
+  <text x="350" y="460" text-anchor="middle" font-family="Arial" font-size="14" fill="#0369a1">Progress Keseluruhan</text>
+  <rect x="170" y="480" width="360" height="20" fill="#e5e7eb" rx="4"/>
+  <rect x="170" y="480" width="171" height="20" fill="#3b82f6" rx="4"/>
+  <text x="350" y="515" text-anchor="middle" font-family="Arial" font-size="12" fill="#374151">47.5%</text>
+  <text x="350" y="560" text-anchor="middle" font-family="Arial" font-size="14" fill="#1f2937" font-weight="bold">Milestone</text>
+  <text x="350" y="580" text-anchor="middle" font-family="Arial" font-size="12" fill="#6b7280">Tandai sebagai selesai saat target tercapai</text>
+</svg>
